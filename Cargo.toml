@@ -1,0 +1,22 @@
+[package]
+name = "starch"
+version = "0.1.0"
+edition = "2021"
+description = "CLI utility for the Steam version of RetroArch"
+authors = ["Benjamin Dengler <h@bede.re>"]
+repository = "https://github.com/ekx/starch"
+license = "MIT"
+keywords = ["retroarch", "steam"]
+categories = ["command-line-utilities"]
+
+[dependencies]
+steamlocate = "2.0.0-beta.2"
+rust-ini = "0.21.0"
+reqwest = { version = "0.12.3", features = ["stream"] }
+tokio = { version = "1.37.0", features = ["rt", "rt-multi-thread", "macros"] }
+sevenz-rust = "0.6.0"
+indicatif = "0.17.8"
+futures-util = "0.3.30"
+anyhow = "1.0.82"
+zip = "0.6.6"
+clap = { version = "4.5.3", features = ["derive"] }
