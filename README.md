@@ -1,7 +1,7 @@
 # starch
 [![Build Status](https://img.shields.io/github/actions/workflow/status/ekx/starch/.github/workflows/rust.yml)](https://github.com/ekx/starch/actions/workflows/rust.yml)
 [![Crates.io version](https://img.shields.io/crates/v/starch.svg)](https://crates.io/crates/starch)
-[![docs.rs](https://img.shields.io/docsrs/starch)](https://docs.rs/starch)
+[![GitHub Release](https://img.shields.io/github/v/release/ekx/starch)](https://github.com/ekx/starch/releases)
 
 CLI utility for the Steam version of RetroArch
 
