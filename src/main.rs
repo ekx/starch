@@ -79,13 +79,13 @@ async fn update_cores(version: String, retro_arch_path: Option<PathBuf>) -> Resu
         .expect("Couldn't find info path in RetroArch config");
 
     let core_path = if core_path_settings.starts_with(":") {
-        retro_arch_path.join(core_path_settings.replace(":", "."))
+        retro_arch_path.join(core_path_settings.replace(":/", "./").replace(":", ""))
     } else {
         PathBuf::from(core_path_settings)
     };
 
     let info_path = if info_path_settings.starts_with(":") {
-        retro_arch_path.join(info_path_settings.replace(":", "."))
+        retro_arch_path.join(info_path_settings.replace(":/", "./").replace(":", ""))
     } else {
         PathBuf::from(info_path_settings)
     };
@@ -95,7 +95,7 @@ async fn update_cores(version: String, retro_arch_path: Option<PathBuf>) -> Resu
     } else {
         version
     };
-    
+
     let os = consts::OS;
     let arch = consts::ARCH;
 

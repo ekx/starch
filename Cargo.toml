@@ -1,6 +1,6 @@
 [package]
 name = "starch"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 description = "CLI utility for the Steam version of RetroArch"
 authors = ["Benjamin Dengler <h@bede.re>"]
