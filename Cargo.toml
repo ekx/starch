@@ -8,7 +8,7 @@ repository = "https://github.com/ekx/starch"
 license = "MIT"
 keywords = ["retroarch", "steam"]
 categories = ["command-line-utilities"]
-exclude = [".idea/*", ".vscode/*"]
+exclude = [".idea/*", ".vscode/*", ".github/*"]
 
 [dependencies]
 steamlocate = "2.0.0-beta.2"
