@@ -21,8 +21,8 @@ cargo install starch
 ## Usage
 ```
 starch update-cores
-//TODO: starch export 'Sony - PlayStation/Tony Hawk's Pro Skater 2 (USA)'
-//TODO: starch import 'Nintendo - Super Nintendo Entertainment System/Marvelous - Mouhitotsu no Takara-jima (Japan)'
+//TODO: starch export 'Sony - PlayStation' 'Tony Hawk's Pro Skater 2 (USA)'
+//TODO: starch import 'Nintendo - Super Nintendo Entertainment System' 'Marvelous - Mouhitotsu no Takara-jima (Japan)'
 ``` 
 Detailed usage instruction can be queried with `-h` or `--help`
 
