@@ -1,4 +1,3 @@
-use std::cmp::min;
 use std::env::consts;
 use std::fs::{remove_file, File};
 use std::io::{Read, Write};
@@ -84,6 +83,7 @@ pub(crate) async fn update_cores(version: String, retro_arch_path: Option<PathBu
     )?;
 
     remove_file(info_download_file_path)?;
+    println!("Cores successfully updated.");
 
     Ok(())
 }
@@ -124,9 +124,8 @@ async fn download_file(
         let chunk = item?;
         file.write_all(&chunk)?;
 
-        let new = min(downloaded + (chunk.len() as u64), total_size);
-        downloaded = new;
-        progress_bar.set_position(new);
+        downloaded += chunk.len() as u64;
+        progress_bar.set_position(downloaded);
     }
 
     progress_bar.finish();
@@ -156,7 +155,7 @@ fn extract_zip_file(file: &PathBuf, destination: &PathBuf, message: &'static str
         .unwrap()
         .progress_chars("#>-"));
 
-    let mut uncompressed_size: u64 = 0;
+    let mut decompressed_size: u64 = 0;
 
     // Extract archive
     for index in 0..archive.len() {
@@ -180,10 +179,9 @@ fn extract_zip_file(file: &PathBuf, destination: &PathBuf, message: &'static str
             }
 
             extracted_file.write_all(&buffer[..read_size])?;
-            uncompressed_size += read_size as u64;
 
-            let new = min(uncompressed_size, total_size);
-            progress_bar.set_position(new);
+            decompressed_size += read_size as u64;
+            progress_bar.set_position(decompressed_size);
         }
     }
 
@@ -212,7 +210,7 @@ fn extract_7zip_file(file: &PathBuf, destination: &PathBuf, message: &'static st
         .unwrap()
         .progress_chars("#>-"));
 
-    let mut uncompressed_size: u64 = 0;
+    let mut decompressed_size: u64 = 0;
 
     // Extract archive
     sz.for_each_entries(|entry, reader| {
@@ -234,10 +232,9 @@ fn extract_7zip_file(file: &PathBuf, destination: &PathBuf, message: &'static st
             }
 
             file.write_all(&buffer[..read_size])?;
-            uncompressed_size += read_size as u64;
 
-            let new = min(uncompressed_size, total_size);
-            progress_bar.set_position(new);
+            decompressed_size += read_size as u64;
+            progress_bar.set_position(decompressed_size);
         }
     })?;
 
