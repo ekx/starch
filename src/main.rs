@@ -9,6 +9,8 @@ use std::path::PathBuf;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
+use ini::Ini;
+use steamlocate::SteamDir;
 
 #[derive(Parser)]
 #[command(version, about, propagate_version = false, subcommand_required = true)]
@@ -112,4 +114,32 @@ async fn main() -> Result<()> {
     }
 
     Ok(())
+}
+
+fn get_retro_arch_config(retro_arch_path: Option<PathBuf>) -> Result<(Ini, PathBuf)> {
+    let retro_arch_path = retro_arch_path
+        .or_else(|| {
+            let steam_dir = SteamDir::locate().expect("Steam not found");
+            let (app, library) = steam_dir.find_app(1118310).expect("RetroArch not found")?;
+
+            Some(library.resolve_app_dir(&app))
+        })
+        .expect("RetroArch not installed in Steam");
+
+    let config_file_path = retro_arch_path.join("retroarch.cfg");
+    Ok((Ini::load_from_file(config_file_path)?, retro_arch_path))
+}
+
+fn get_path_from_config(config: &Ini, key: &str, retro_arch_path: &PathBuf) -> Result<PathBuf> {
+    let path = config
+        .get_from(None::<String>, key)
+        .expect(&format!("Key {key} not found in RetroArch config"));
+
+    let result = if path.starts_with(":") {
+        retro_arch_path.join(path.replace(":/", "./").replace(":", ""))
+    } else {
+        PathBuf::from(path)
+    };
+
+    Ok(result)
 }

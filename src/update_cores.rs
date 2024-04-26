@@ -1,3 +1,5 @@
+use crate::{get_path_from_config, get_retro_arch_config};
+
 use std::env::consts;
 use std::fs::{remove_file, File};
 use std::io::{Read, Write};
@@ -6,36 +8,16 @@ use std::path::{Path, PathBuf};
 use anyhow::Result;
 use futures_util::StreamExt;
 use indicatif::{ProgressBar, ProgressStyle};
-use ini::Ini;
 use reqwest::Client;
 use sevenz_rust::{Password, SevenZReader};
-use steamlocate::SteamDir;
 use zip::ZipArchive;
 
 pub(crate) async fn update_cores(version: String, retro_arch_path: Option<PathBuf>) -> Result<()> {
-    // Get RetroArch path from Steam if not supplied via args
-    let retro_arch_path = retro_arch_path
-        .or_else(|| {
-            let steam_dir = SteamDir::locate().expect("Steam not found");
-            let (app, library) = steam_dir.find_app(1118310).expect("RetroArch not found")?;
+    // Get RetroArch config and load needed paths from it
+    let (config, retro_arch_path) = get_retro_arch_config(retro_arch_path)?;
 
-            Some(library.resolve_app_dir(&app))
-        })
-        .expect("RetroArch not installed in Steam");
-
-    // Load core and info paths from RetroArch config
-    let config_file_path = retro_arch_path.join("retroarch.cfg");
-    let config = Ini::load_from_file(config_file_path)?;
-
-    let core_path_settings = config
-        .get_from(None::<String>, "libretro_directory")
-        .expect("Couldn't find core path in RetroArch config");
-    let info_path_settings = config
-        .get_from(None::<String>, "libretro_info_path")
-        .expect("Couldn't find info path in RetroArch config");
-
-    let core_path = parse_retro_arch_path(core_path_settings, &retro_arch_path);
-    let info_path = parse_retro_arch_path(info_path_settings, &retro_arch_path);
+    let core_path = get_path_from_config(&config, "libretro_directory", &retro_arch_path)?;
+    let info_path = get_path_from_config(&config, "libretro_info_path", &retro_arch_path)?;
 
     // Build download URL for RetroArch cores and download and extract them
     let release_type = if version != "nightly" {
@@ -83,17 +65,9 @@ pub(crate) async fn update_cores(version: String, retro_arch_path: Option<PathBu
     )?;
 
     remove_file(info_download_file_path)?;
+
     println!("Cores successfully updated.");
-
     Ok(())
-}
-
-fn parse_retro_arch_path(path: &str, retro_arch_path: &PathBuf) -> PathBuf {
-    if path.starts_with(":") {
-        retro_arch_path.join(path.replace(":/", "./").replace(":", ""))
-    } else {
-        PathBuf::from(path)
-    }
 }
 
 async fn download_file(
@@ -115,7 +89,7 @@ async fn download_file(
         .unwrap()
         .progress_chars("#>-"));
 
-    // download chunks
+    // Download file
     let mut file = File::create(path)?;
     let mut downloaded: u64 = 0;
     let mut stream = response.bytes_stream();
