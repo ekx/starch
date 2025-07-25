@@ -8,7 +8,7 @@
             "type": "lldb",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/target/debug/ra_steam_helper",
+            "program": "${workspaceFolder}/target/debug/starch",
             "args": ["update-cores"],
             "cwd": "${workspaceFolder}"
         }
