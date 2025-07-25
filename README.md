@@ -9,8 +9,8 @@ CLI utility for the Steam version of RetroArch
 Supports Windows and Linux. Should run on macOS but is untested.
 
 - Update all cores (even non Steam cores)
-- TODO: Export playlist entries to USB device
-- TODO: Import from USB to playlist
+- TODO: Export playlist entries to archive file
+- TODO: Import from archive file to playlist
 
 ## Installation
 Preferred installation method is through [cargo](https://www.rust-lang.org/tools/install)
@@ -21,8 +21,8 @@ cargo install starch
 ## Usage
 ```
 starch update-cores
-//TODO: starch export 'Sony - PlayStation' 'Tony Hawk's Pro Skater 2 (USA)'
-//TODO: starch import 'Nintendo - Super Nintendo Entertainment System' 'Marvelous - Mouhitotsu no Takara-jima (Japan)'
+starch export 'Sony - PlayStation' 'Tony Hawk's Pro Skater 2 (USA)' '.\thps2.zip'
+//TODO: starch import '.\thps2.zip'
 ``` 
 Detailed usage instruction can be queried with `-h` or `--help`
 
@@ -38,6 +38,8 @@ Detailed usage instruction can be queried with `-h` or `--help`
 * [anyhow](https://github.com/dtolnay/anyhow) - (MIT / Apache 2.0)
 * [zip](https://github.com/zip-rs/zip) - (MIT)
 * [clap](https://github.com/clap-rs/clap) - (MIT / Apache 2.0)
+* [serde](https://github.com/serde-rs/serde) - (MIT / Apache 2.0)
+* [tempfile](https://github.com/Stebalien/tempfile) - (MIT / Apache 2.0)
 
 ## License
 - [MIT](https://github.com/ekx/starch/blob/master/LICENSE)

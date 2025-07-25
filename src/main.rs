@@ -38,7 +38,7 @@ enum Commands {
         retro_arch_path: Option<PathBuf>,
     },
 
-    #[command(about = "Exports a game from RetroArch to a removable media")]
+    #[command(about = "Exports a game from a RetroArch playlist to a archive file")]
     Export {
         #[arg(help = "Playlist to export from", required = true)]
         playlist: String,
@@ -46,11 +46,8 @@ enum Commands {
         #[arg(help = "Game to be exported", required = true)]
         game: String,
 
-        #[arg(
-            help = "Export destination path [default: first available removable media]",
-            required = false
-        )]
-        destination: Option<PathBuf>,
+        #[arg(help = "Export destination path")]
+        destination: PathBuf,
 
         #[arg(
             short,
@@ -60,19 +57,10 @@ enum Commands {
         retro_arch_path: Option<PathBuf>,
     },
 
-    #[command(about = "Imports a game from a removable media to RetroArch")]
+    #[command(about = "Imports a game from a archive file to a RetroArch playlist")]
     Import {
-        #[arg(help = "Playlist to import into", required = true)]
-        playlist: String,
-
-        #[arg(help = "Game to be imported", required = true)]
-        game: String,
-
-        #[arg(
-            help = "Import origin path [default: first available removable media]",
-            required = false
-        )]
-        origin: Option<PathBuf>,
+        #[arg(help = "Import origin path")]
+        origin: PathBuf,
 
         #[arg(
             short,
@@ -100,15 +88,13 @@ async fn main() -> Result<()> {
             destination,
             retro_arch_path,
         }) => {
-            export(playlist, game, destination, retro_arch_path)?;
+            export(playlist, game, destination, retro_arch_path.to_owned())?;
         }
         Some(Commands::Import {
-            playlist,
-            game,
             origin,
             retro_arch_path,
         }) => {
-            import(playlist, game, origin, retro_arch_path)?;
+            import(origin, retro_arch_path.to_owned())?;
         }
         None => {}
     }

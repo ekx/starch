@@ -13,7 +13,7 @@ use sevenz_rust::{Password, SevenZReader};
 use zip::ZipArchive;
 
 pub(crate) async fn update_cores(version: String, retro_arch_path: Option<PathBuf>) -> Result<()> {
-    // Get RetroArch config and load needed paths from it
+    // Get RetroArch config and load the necessary paths from it
     let (config, retro_arch_path) = get_retro_arch_config(retro_arch_path)?;
 
     let core_path = get_path_from_config(&config, "libretro_directory", &retro_arch_path)?;
@@ -85,8 +85,7 @@ async fn download_file(
     progress_bar.set_message(message);
 
     progress_bar.set_style(ProgressStyle::default_bar()
-        .template("{msg}\n{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({bytes_per_sec}, {eta})")
-        .unwrap()
+        .template("{msg}\n{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({bytes_per_sec}, {eta})")?
         .progress_chars("#>-"));
 
     // Download file
@@ -125,8 +124,7 @@ fn extract_zip_file(file: &PathBuf, destination: &PathBuf, message: &'static str
     progress_bar.set_message(message);
 
     progress_bar.set_style(ProgressStyle::default_bar()
-        .template("{msg}\n{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({bytes_per_sec}, {eta})")
-        .unwrap()
+        .template("{msg}\n{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({bytes_per_sec}, {eta})")?
         .progress_chars("#>-"));
 
     let mut decompressed_size: u64 = 0;
@@ -180,8 +178,7 @@ fn extract_7zip_file(file: &PathBuf, destination: &PathBuf, message: &'static st
     progress_bar.set_message(message);
 
     progress_bar.set_style(ProgressStyle::default_bar()
-        .template("{msg}\n{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({bytes_per_sec}, {eta})")
-        .unwrap()
+        .template("{msg}\n{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {bytes}/{total_bytes} ({bytes_per_sec}, {eta})")?
         .progress_chars("#>-"));
 
     let mut decompressed_size: u64 = 0;
