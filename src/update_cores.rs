@@ -1,7 +1,7 @@
 use crate::{get_path_from_config, get_retro_arch_config};
 
 use std::env::consts;
-use std::fs::{remove_file, File};
+use std::fs::{File, remove_file};
 use std::io::{Read, Write};
 use std::path::{Path, PathBuf};
 
