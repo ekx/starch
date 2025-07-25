@@ -18,11 +18,13 @@ Preferred installation method is through [cargo](https://www.rust-lang.org/tools
 cargo install starch
 ``` 
 
+For use on immutable distros download the AppImage from the [Releases](https://github.com/ekx/starch/releases)
+
 ## Usage
 ```
 starch update-cores
-starch export 'Sony - PlayStation' 'Tony Hawk's Pro Skater 2 (USA)' '.\thps2.zip'
-//TODO: starch import '.\thps2.zip'
+starch export 'Sony - PlayStation' 'Tony Hawk's Pro Skater 2 (USA)' './thps2.zip'
+starch import './thps2.zip'
 ``` 
 Detailed usage instruction can be queried with `-h` or `--help`
 
