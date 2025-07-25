@@ -129,12 +129,12 @@ pub(crate) fn import(
         files.push((&title_file_buf, title_file_path.to_str().unwrap()));
     }
 
-    write_files_with_progress(&*files)?;
+    write_files_to_disk(&*files)?;
 
     Ok(())
 }
 
-fn write_files_with_progress(files: &[(&Vec<u8>, &str)]) -> anyhow::Result<()> {
+fn write_files_to_disk(files: &[(&Vec<u8>, &str)]) -> anyhow::Result<()> {
     // Calculate total bytes to write across all files
     let total_bytes: u64 = files.iter().map(|(data, _)| data.len() as u64).sum();
 

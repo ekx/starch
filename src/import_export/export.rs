@@ -112,12 +112,12 @@ pub(crate) fn export(
         ));
     }
 
-    write_files_to_zip_with_progress(&files_and_paths, destination)?;
+    write_files_to_zip(&files_and_paths, destination)?;
 
     Ok(())
 }
 
-pub fn write_files_to_zip_with_progress(files: &[(&File, String)], zip_path: &Path) -> Result<()> {
+pub fn write_files_to_zip(files: &[(&File, String)], zip_path: &Path) -> Result<()> {
     let zip_file = File::create(zip_path)
         .with_context(|| format!("Failed to create zip archive at {:?}", zip_path))?;
     let mut zip = ZipWriter::new(zip_file);
