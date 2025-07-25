@@ -5,7 +5,7 @@ use std::path::Path;
 
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default)]
 pub struct Playlist {
     pub version: String,
     pub default_core_path: String,
@@ -25,7 +25,7 @@ pub struct Playlist {
     pub items: Vec<PlaylistItem>,
 }
 
-#[derive(Deserialize, Serialize, Clone, Debug)]
+#[derive(Deserialize, Serialize, Clone, Debug, Default)]
 pub struct PlaylistItem {
     pub path: String,
     pub label: String,

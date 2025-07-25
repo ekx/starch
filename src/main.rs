@@ -59,8 +59,15 @@ enum Commands {
 
     #[command(about = "Imports a game from a archive file to a RetroArch playlist")]
     Import {
-        #[arg(help = "Import origin path")]
+        #[arg(help = "Import origin path", required = true)]
         origin: PathBuf,
+
+        #[arg(
+            help = "Game to be exported",
+            required = false,
+            help = "Where to put the imported game. Only gets used if playlist doesn't already exist. Roms folder in the home directory will be used if unset"
+        )]
+        destination: Option<PathBuf>,
 
         #[arg(
             short,
@@ -92,9 +99,10 @@ async fn main() -> Result<()> {
         }
         Some(Commands::Import {
             origin,
+            destination,
             retro_arch_path,
         }) => {
-            import(origin, retro_arch_path.to_owned())?;
+            import(origin, destination.to_owned(), retro_arch_path.to_owned())?;
         }
         None => {}
     }

@@ -1,4 +1,4 @@
-use crate::import_export::{get_file_name, Playlist};
+use crate::import_export::{Playlist, get_file_name};
 use crate::{get_path_from_config, get_retro_arch_config};
 
 use std::fs::File;
@@ -51,7 +51,7 @@ pub(crate) fn export(
         .join(format!("{}.png", game));
 
     // Build new playlist
-    let mut new_playlist = parsed_playlist.clone(); // Clone everything
+    let mut new_playlist = parsed_playlist.clone();
     new_playlist.items = parsed_playlist
         .items
         .iter()
@@ -117,16 +117,13 @@ pub(crate) fn export(
     Ok(())
 }
 
-pub fn write_files_to_zip_with_progress(
-    files_and_paths: &[(&File, String)],
-    zip_path: &Path,
-) -> Result<()> {
+pub fn write_files_to_zip_with_progress(files: &[(&File, String)], zip_path: &Path) -> Result<()> {
     let zip_file = File::create(zip_path)
         .with_context(|| format!("Failed to create zip archive at {:?}", zip_path))?;
     let mut zip = ZipWriter::new(zip_file);
 
     // Calculate total size for progress bar
-    let total_size: u64 = files_and_paths
+    let total_size: u64 = files
         .iter()
         .map(|(file, _)| {
             file.metadata()
@@ -143,7 +140,7 @@ pub fn write_files_to_zip_with_progress(
         .progress_chars("#>-"));
     progress_bar.set_message("Exporting game...");
 
-    for (file, target_path) in files_and_paths {
+    for (file, target_path) in files {
         // Rewind the file to start
         let mut file = file
             .try_clone()
