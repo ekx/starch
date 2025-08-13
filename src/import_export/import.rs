@@ -2,6 +2,7 @@ use crate::import_export::{Playlist, get_file_name, get_file_stem};
 use crate::{get_path_from_config, get_retro_arch_config};
 
 use std::env::home_dir;
+use std::fs;
 use std::fs::File;
 use std::io::{BufReader, BufWriter, Read, Write};
 use std::path::{Path, PathBuf};
@@ -151,6 +152,13 @@ fn write_files_to_disk(files: &[(&Vec<u8>, &str)]) -> anyhow::Result<()> {
 
     // Write each file
     for (_file_idx, (data, path)) in files.iter().enumerate() {
+        let dir = Path::new(path)
+            .parent()
+            .ok_or_else(|| anyhow::anyhow!("no parent directory"))?;
+
+        // Create every missing directory in the chain.
+        fs::create_dir_all(dir)?;
+
         let file = File::create(path)?;
         let mut writer = BufWriter::new(file);
 

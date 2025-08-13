@@ -1,3 +1,6 @@
+### 0.2.2
+Fixed error in import when directory didn't already exist
+
 ### 0.2.1
 Fixed error in README
 
