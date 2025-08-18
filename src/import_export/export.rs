@@ -13,7 +13,7 @@ use zip::write::{FileOptions, ZipWriter};
 pub(crate) fn export(
     playlist: &String,
     game: &String,
-    destination: &PathBuf,
+    destination: &Path,
     retro_arch_path: Option<PathBuf>,
 ) -> Result<()> {
     // Get RetroArch config and load the necessary paths from it
@@ -33,7 +33,7 @@ pub(crate) fn export(
     let playlist_item = parsed_playlist
         .items
         .iter()
-        .find(|item| item.label == game.to_owned())
+        .find(|item| item.label == *game)
         .expect("Specified game not found in playlist");
 
     // Find thumbnail files
@@ -55,7 +55,7 @@ pub(crate) fn export(
     new_playlist.items = parsed_playlist
         .items
         .iter()
-        .filter(|item| item.label == game.to_owned())
+        .filter(|item| item.label == *game)
         .cloned()
         .collect();
 
@@ -70,7 +70,7 @@ pub(crate) fn export(
 
     // Create all files needed for export
     let temp_playlist_file = File::open(new_playlist_file_path)?;
-    let rom_file = File::open(playlist_item.path.to_owned())?;
+    let rom_file = File::open(&playlist_item.path)?;
     let boxart_file: File;
     let snap_file: File;
     let title_file: File;

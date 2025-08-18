@@ -52,7 +52,7 @@ pub(crate) async fn update_cores(version: String, retro_arch_path: Option<PathBu
 
     download_file(
         &Client::new(),
-        &info_download_url,
+        info_download_url,
         &info_download_file_path,
         "Downloading info files...",
     )
@@ -105,7 +105,7 @@ async fn download_file(
     Ok(())
 }
 
-fn extract_zip_file(file: &PathBuf, destination: &PathBuf, message: &'static str) -> Result<()> {
+fn extract_zip_file(file: &PathBuf, destination: &Path, message: &'static str) -> Result<()> {
     // Zip setup
     let zip_file = File::open(file)?;
     let mut archive = ZipArchive::new(zip_file)?;
@@ -161,7 +161,7 @@ fn extract_zip_file(file: &PathBuf, destination: &PathBuf, message: &'static str
     Ok(())
 }
 
-fn extract_7zip_file(file: &PathBuf, destination: &PathBuf, message: &'static str) -> Result<()> {
+fn extract_7zip_file(file: &PathBuf, destination: &Path, message: &'static str) -> Result<()> {
     // SevenZ setup
     let mut sz = SevenZReader::open(file, Password::empty())?;
 

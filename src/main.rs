@@ -5,7 +5,7 @@ use crate::import_export::export::export;
 use crate::import_export::import::import;
 use crate::update_cores::update_cores;
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
@@ -124,10 +124,10 @@ fn get_retro_arch_config(retro_arch_path: Option<PathBuf>) -> Result<(Ini, PathB
     Ok((Ini::load_from_file(config_file_path)?, retro_arch_path))
 }
 
-fn get_path_from_config(config: &Ini, key: &str, retro_arch_path: &PathBuf) -> Result<PathBuf> {
+fn get_path_from_config(config: &Ini, key: &str, retro_arch_path: &Path) -> Result<PathBuf> {
     let path = config
         .get_from(None::<String>, key)
-        .expect(&format!("Key {key} not found in RetroArch config"));
+        .unwrap_or_else(|| panic!("Key {key} not found in RetroArch config"));
 
     let result = if path.starts_with(":") {
         retro_arch_path.join(path.replace(":/", "./").replace(":", ""))

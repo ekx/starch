@@ -16,10 +16,8 @@ pub(crate) fn import(
     retro_arch_path: Option<PathBuf>,
 ) -> anyhow::Result<()> {
     // Read in import archive
-    let file = File::open(origin).ok().expect("Could not read import file");
-    let mut archive = ZipArchive::new(BufReader::new(file))
-        .ok()
-        .expect("Could not read import file");
+    let file = File::open(origin).expect("Could not read import file");
+    let mut archive = ZipArchive::new(BufReader::new(file)).expect("Could not read import file");
 
     let mut playlist: String = String::new();
     let mut game: String = String::new();
@@ -41,7 +39,7 @@ pub(crate) fn import(
 
             playlist = get_file_stem(name.as_str()).unwrap().to_string();
 
-            parsed_playlist = serde_json::from_slice(&*buf)?;
+            parsed_playlist = serde_json::from_slice(&buf)?;
             game = parsed_playlist.items.first().unwrap().label.to_owned();
         } else if name.starts_with("roms") {
             entry.read_to_end(&mut rom_file_buf).ok().unwrap();
@@ -65,7 +63,7 @@ pub(crate) fn import(
 
     // If playlist exists add imported entry to it
     if Path::new(&playlist_file_path).exists() {
-        let playlist_file = File::open(playlist_file_path.to_owned())?;
+        let playlist_file = File::open(&playlist_file_path)?;
         let reader = BufReader::new(playlist_file);
         let existing_playlist: Playlist = serde_json::from_reader(reader)?;
 
@@ -73,7 +71,7 @@ pub(crate) fn import(
         new_playlist.items = existing_playlist
             .items
             .iter()
-            .filter(|item| item.label != game.to_owned())
+            .filter(|item| item.label != game)
             .cloned()
             .collect();
     }
@@ -130,7 +128,7 @@ pub(crate) fn import(
         files.push((&title_file_buf, title_file_path.to_str().unwrap()));
     }
 
-    write_files_to_disk(&*files)?;
+    write_files_to_disk(&files)?;
 
     Ok(())
 }
@@ -151,7 +149,7 @@ fn write_files_to_disk(files: &[(&Vec<u8>, &str)]) -> anyhow::Result<()> {
     let mut total_written = 0u64;
 
     // Write each file
-    for (_file_idx, (data, path)) in files.iter().enumerate() {
+    for (data, path) in files.iter() {
         let dir = Path::new(path)
             .parent()
             .ok_or_else(|| anyhow::anyhow!("no parent directory"))?;
