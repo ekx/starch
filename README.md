@@ -9,11 +9,11 @@ CLI utility for the Steam version of RetroArch
 Supports Windows and Linux. Should run on macOS but is untested.
 
 - Update all cores (even non Steam cores)
-- Export playlist entries to archive file
+- Export playlist entries to an archive file
 - Import from archive file to playlist
 
 ## Installation
-Preferred installation method is through [cargo](https://www.rust-lang.org/tools/install)
+The preferred installation method is through [cargo](https://www.rust-lang.org/tools/install)
 ```
 cargo install starch
 ``` 

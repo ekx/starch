@@ -8,6 +8,9 @@
       <w>libretro</w>
       <w>reqwest</w>
       <w>retroarch</w>
+      <w>sevenz</w>
+      <w>steamlocate</w>
+      <w>tempfile</w>
     </words>
   </dictionary>
 </component>

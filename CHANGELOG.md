@@ -1,3 +1,6 @@
+### 0.2.3
+Minor code cleanup
+
 ### 0.2.2
 Fixed error in import when directory didn't already exist
 
